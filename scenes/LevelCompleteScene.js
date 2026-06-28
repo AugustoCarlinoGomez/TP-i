@@ -3,13 +3,18 @@ export default class LevelCompleteScene extends Phaser.Scene {
     super('level-complete');
   }
 
+  preload() {
+    this.load.image('win', 'assetas/win.jpg');
+  }
+
   init(data) {
     this.score = data.score || 0;
     this.dropSpeedMultiplier = data.dropSpeedMultiplier || 1;
   }
 
   create() {
-    this.cameras.main.setBackgroundColor('#111111');
+    const { width, height } = this.scale;
+    this.add.image(width / 2, height / 2, 'win').setDisplaySize(width, height);
 
     this.add.text(400, 140, '¡Nivel completado!', {
       fontFamily: 'Arial',

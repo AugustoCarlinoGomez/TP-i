@@ -17,22 +17,26 @@ export default class HelloWorldScene extends Phaser.Scene {
     this.collectionQueued = false;
     this.playerCollectedThisFrame = [];
     this.netCollectedThisFrame = [];
+    this.collectEffects = [];
   }
 
   preload() {
-    // no external assets needed; player and boxes are drawn with shapes and text
+    this.load.image('baldosas', 'assetas/baldosas.png');
+    this.load.image('hamburguesa', 'assetas/ham.png');
+    this.load.image('pj', 'assetas/pj.png');
+    this.load.image('suma', 'assetas/suma.png');
   }
 
   create() {
-    this.cameras.main.setBackgroundColor('#1b1b2f');
-
     const { width, height } = this.scale;
+    this.add.image(width / 2, height / 2, 'baldosas').setDisplaySize(width, height);
 
-    this.player = this.add.rectangle(width / 2, height - 40, 80, 24, 0xffffff);
+    this.player = this.add.image(width / 2, height - 40, 'pj').setDisplaySize(96, 57.6);
     this.physics.add.existing(this.player);
     this.player.body.setCollideWorldBounds(true);
     this.player.body.setAllowGravity(false);
     this.player.body.setImmovable(true);
+    this.player.body.setSize(96, 57.6);
 
     this.net = this.add.rectangle(width / 2, height - 58, width, 8, 0xffffff).setVisible(false);
     this.physics.add.existing(this.net);
@@ -85,6 +89,17 @@ export default class HelloWorldScene extends Phaser.Scene {
         this.removeBox(item.box);
       }
     });
+
+    this.collectEffects = this.collectEffects.filter((effect) => {
+      if (!effect.active) {
+        return false;
+      }
+      if (effect.y > this.scale.height + 80 || effect.x < -80 || effect.x > this.scale.width + 80) {
+        effect.destroy();
+        return false;
+      }
+      return true;
+    });
   }
 
   spawnPair() {
@@ -112,20 +127,20 @@ export default class HelloWorldScene extends Phaser.Scene {
 
   createNumberBox(x, value) {
     const y = -40;
-    const box = this.add.rectangle(x, y, 64, 64, 0xff0000);
-    box.setStrokeStyle(2, 0x000000);
+    const box = this.add.image(x, y, 'hamburguesa').setDisplaySize(64, 64);
     this.physics.add.existing(box);
     box.body.setAllowGravity(false);
-    box.body.setVelocityY(140 * this.dropSpeedMultiplier);
+    box.body.setVelocityY(70 * this.dropSpeedMultiplier);
     box.body.setImmovable(true);
     box.body.setSize(64, 64);
     box.value = value;
+    box.setDepth(1);
 
     const text = this.add.text(x, y, `${value}`, {
       fontFamily: 'Arial',
-      fontSize: '28px',
-      color: '#000000',
-    }).setOrigin(0.5);
+      fontSize: '36px',
+      color: '#ff0000',
+    }).setOrigin(0.5).setDepth(2);
 
     const item = {
       box,
@@ -163,6 +178,7 @@ export default class HelloWorldScene extends Phaser.Scene {
       this.netCollectedThisFrame.push(item);
     } else {
       this.playerCollectedThisFrame.push(item);
+      this.spawnSumEffect(item.box.x, item.box.y, item.box.body.velocity);
     }
 
     if (!this.collectionQueued) {
@@ -173,6 +189,25 @@ export default class HelloWorldScene extends Phaser.Scene {
         callbackScope: this,
       });
     }
+  }
+
+  spawnSumEffect(x, y, velocity) {
+    const effect = this.add.image(x, y, 'suma').setDisplaySize(40, 40).setDepth(10);
+    this.physics.add.existing(effect);
+    effect.body.setAllowGravity(false);
+    effect.body.setVelocity(velocity.x, velocity.y / 3);
+    effect.body.setImmovable(true);
+    this.collectEffects.push(effect);
+
+    this.time.addEvent({
+      delay: 600,
+      callback: () => {
+        if (effect.active) {
+          effect.destroy();
+        }
+      },
+      callbackScope: this,
+    });
   }
 
   flushCollectedBoxes() {
@@ -333,7 +368,7 @@ export default class HelloWorldScene extends Phaser.Scene {
 
     this.clearCurrentBoxes();
 
-    if (this.sumFallenNumbers > 0 && this.score > this.sumFallenNumbers / 3) {
+    if (this.sumFallenNumbers > 0 && this.score > this.sumFallenNumbers / 2) {
       this.scene.start('game-over', {
         score: this.score,
         totalSum: this.sumFallenNumbers,

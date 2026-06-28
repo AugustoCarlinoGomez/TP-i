@@ -3,6 +3,10 @@ export default class GameOverScene extends Phaser.Scene {
     super('game-over');
   }
 
+  preload() {
+    this.load.image('gameover', 'assetas/gameover.jpg');
+  }
+
   init(data) {
     this.score = data.score || 0;
     this.totalSum = data.totalSum || 0;
@@ -10,7 +14,8 @@ export default class GameOverScene extends Phaser.Scene {
   }
 
   create() {
-    this.cameras.main.setBackgroundColor('#1b1b1b');
+    const { width, height } = this.scale;
+    this.add.image(width / 2, height / 2, 'gameover').setDisplaySize(width, height);
 
     this.add.text(400, 140, 'Game Over', {
       fontFamily: 'Arial',

@@ -3,16 +3,19 @@ export default class StartScene extends Phaser.Scene {
     super('start');
   }
 
-  create() {
-    this.cameras.main.setBackgroundColor('#0f172a');
+  preload() {
+    this.load.image('inicio', 'assetas/inicio.webp');
+  }
 
+  create() {
     const { width, height } = this.scale;
+    this.add.image(width / 2, height / 2, 'inicio').setDisplaySize(width, height);
     this.startButtons = [];
 
     this.add.text(width / 2, height / 2 - 120, 'VEHICULAR \n HAMBURGUER \n HELPER ', {
       fontFamily: 'Arial',
       fontSize: '48px',
-      color: '#ffffff',
+      color: '#000000',
       align: 'center',
     }).setOrigin(0.5);
 

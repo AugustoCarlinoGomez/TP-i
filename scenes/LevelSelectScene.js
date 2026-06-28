@@ -3,9 +3,13 @@ export default class LevelSelectScene extends Phaser.Scene {
     super('level-select');
   }
 
+  preload() {
+    this.load.image('nivel', 'assetas/nivel.jpg');
+  }
+
   create() {
-    this.cameras.main.setBackgroundColor('#111827');
-    const { width } = this.scale;
+    const { width, height } = this.scale;
+    this.add.image(width / 2, height / 2, 'nivel').setDisplaySize(width, height);
 
     this.add.text(width / 2, 100, 'Selecciona nivel', {
       fontFamily: 'Arial',
