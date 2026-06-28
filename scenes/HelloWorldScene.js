@@ -28,7 +28,7 @@ export default class HelloWorldScene extends Phaser.Scene {
 
     const { width, height } = this.scale;
 
-    this.player = this.add.rectangle(width / 2, height - 40, 100, 24, 0xffffff);
+    this.player = this.add.rectangle(width / 2, height - 40, 80, 24, 0xffffff);
     this.physics.add.existing(this.player);
     this.player.body.setCollideWorldBounds(true);
     this.player.body.setAllowGravity(false);
@@ -64,7 +64,7 @@ export default class HelloWorldScene extends Phaser.Scene {
   }
 
   update() {
-    const speed = 260;
+    const speed = 200;
     const body = this.player.body;
 
     if (this.cursors.left.isDown) {
@@ -333,7 +333,7 @@ export default class HelloWorldScene extends Phaser.Scene {
 
     this.clearCurrentBoxes();
 
-    if (this.sumFallenNumbers > 0 && this.score > this.sumFallenNumbers / 2) {
+    if (this.sumFallenNumbers > 0 && this.score > this.sumFallenNumbers / 3) {
       this.scene.start('game-over', {
         score: this.score,
         totalSum: this.sumFallenNumbers,

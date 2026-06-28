@@ -6,26 +6,27 @@ export default class StartScene extends Phaser.Scene {
   create() {
     this.cameras.main.setBackgroundColor('#0f172a');
 
-    const { width } = this.scale;
+    const { width, height } = this.scale;
     this.startButtons = [];
 
-    this.add.text(width / 2, 120, 'JUEGO', {
+    this.add.text(width / 2, height / 2 - 120, 'VEHICULAR \n HAMBURGUER \n HELPER ', {
       fontFamily: 'Arial',
-      fontSize: '64px',
+      fontSize: '48px',
       color: '#ffffff',
+      align: 'center',
     }).setOrigin(0.5);
 
-    this.createButton(width / 2, 260, 'Jugar', () => {
+    this.createButton(width / 2, height / 2 + 40, 'Jugar', () => {
       this.scene.start('level-select');
     });
 
-    this.createButton(width / 2, 340, 'Controles', () => {
+    this.createButton(width / 2, height / 2 + 120, 'Controles', () => {
       this.showControls();
     });
 
     this.controlsPanel = this.add.container(0, 0).setVisible(false);
     const panel = this.add.rectangle(width / 2, 320, 520, 180, 0x111827, 0.95);
-    const panelText = this.add.text(width / 2, 280, 'Usa las teclas:\nIZQUIERDA  →  DERECHA', {
+    const panelText = this.add.text(width / 2, 280, 'Usa las flechas para moverse:\nIZQUIERDA ←  → DERECHA', {
       fontFamily: 'Arial',
       fontSize: '26px',
       color: '#ffffff',

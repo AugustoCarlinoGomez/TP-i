@@ -14,15 +14,15 @@ export default class LevelSelectScene extends Phaser.Scene {
     }).setOrigin(0.5);
 
     this.createButton(width / 2, 220, 'Nivel 1', () => {
-      this.scene.start('hello-world', { dropSpeedMultiplier: 2 });
+      this.scene.start('hello-world', { dropSpeedMultiplier: 8 });
     });
 
     this.createButton(width / 2, 300, 'Nivel 2', () => {
-      this.scene.start('hello-world', { dropSpeedMultiplier: 3 });
+      this.scene.start('hello-world', { dropSpeedMultiplier: 12 });
     });
 
     this.createButton(width / 2, 380, 'Nivel 3', () => {
-      this.scene.start('hello-world', { dropSpeedMultiplier: 4 });
+      this.scene.start('hello-world', { dropSpeedMultiplier: 16 });
     });
 
     this.createButton(width / 2, 470, 'Volver al inicio', () => {
